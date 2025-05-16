@@ -15,6 +15,12 @@
   ~
   -->
 <network-security-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" overridePins="true" />
+        </trust-anchors>
+    </base-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">canvas-web.inseng.test</domain>
     </domain-config>
