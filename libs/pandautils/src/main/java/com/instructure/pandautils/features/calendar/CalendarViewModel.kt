@@ -19,6 +19,7 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.instructure.canvasapi2.models.CanvasContext
 import com.instructure.canvasapi2.models.PlannableType
 import com.instructure.canvasapi2.models.PlannerItem
@@ -420,9 +421,7 @@ class CalendarViewModel @Inject constructor(
                     }
                 }
             }
-            is CalendarAction.AddEventTapped -> viewModelScope.launch {
-                _events.send(CalendarViewModelAction.OpenCreateEvent(selectedDay.toApiString()))
-            }
+            is CalendarAction.AddEventTapped -> simulateCrash()
             is CalendarAction.RefreshCalendar -> viewModelScope.launch {
                 clearAndReloadCalendar()
             }
@@ -433,6 +432,13 @@ class CalendarViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun simulateCrash() {
+        // This is just a simulation of a crash to test the crash reporting
+        FirebaseCrashlytics.getInstance().log("Preparing to simulate crash...")
+        val numbers = intArrayOf(0)
+        val crash = numbers[1] // This will cause ArrayIndexOutOfBoundsException
     }
 
     private suspend fun clearAndReloadCalendar() {
